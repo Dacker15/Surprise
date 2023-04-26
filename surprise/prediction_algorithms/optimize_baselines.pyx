@@ -39,14 +39,14 @@ def baseline_als(self):
     for dummy in range(n_epochs):
         for i in self.trainset.all_items():
             dev_i = 0
-            for (u, r) in self.trainset.ir[i]:
+            for (u, r, timestamp) in self.trainset.ir[i]:
                 dev_i += r - global_mean - bu[u]
 
             bi[i] = dev_i / (reg_i + len(self.trainset.ir[i]))
 
         for u in self.trainset.all_users():
             dev_u = 0
-            for (i, r) in self.trainset.ur[u]:
+            for (i, r, timestamp) in self.trainset.ur[u]:
                 dev_u += r - global_mean - bi[i]
             bu[u] = dev_u / (reg_u + len(self.trainset.ur[u]))
 
@@ -75,7 +75,7 @@ def baseline_sgd(self):
     cdef double lr = self.bsl_options.get('learning_rate', 0.005)
 
     for dummy in range(n_epochs):
-        for u, i, r in self.trainset.all_ratings():
+        for u, i, r, timestamp in self.trainset.all_ratings():
             err = (r - (global_mean + bu[u] + bi[i]))
             bu[u] += lr * (err - reg * bu[u])
             bi[i] += lr * (err - reg * bi[i])

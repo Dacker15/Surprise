@@ -42,7 +42,6 @@ class Dataset:
     available methods for loading datasets."""
 
     def __init__(self, reader):
-
         self.reader = reader
 
     @classmethod
@@ -178,7 +177,6 @@ class Dataset:
         return raw_ratings
 
     def construct_trainset(self, raw_trainset):
-
         raw2inner_id_users = {}
         raw2inner_id_items = {}
 
@@ -203,8 +201,8 @@ class Dataset:
                 raw2inner_id_items[irid] = current_i_index
                 current_i_index += 1
 
-            ur[uid].append((iid, r))
-            ir[iid].append((uid, r))
+            ur[uid].append((iid, r, timestamp))
+            ir[iid].append((uid, r, timestamp))
 
         n_users = len(ur)  # number of users
         n_items = len(ir)  # number of items
@@ -224,7 +222,6 @@ class Dataset:
         return trainset
 
     def construct_testset(self, raw_testset):
-
         return [(ruid, riid, r_ui_trans) for (ruid, riid, r_ui_trans, _) in raw_testset]
 
 
@@ -233,7 +230,6 @@ class DatasetUserFolds(Dataset):
     cross-validation) are predefined."""
 
     def __init__(self, folds_files=None, reader=None):
-
         Dataset.__init__(self, reader)
         self.folds_files = folds_files
 
@@ -250,7 +246,6 @@ class DatasetAutoFolds(Dataset):
     all)."""
 
     def __init__(self, ratings_file=None, reader=None, df=None):
-
         Dataset.__init__(self, reader)
         self.has_been_split = False  # flag indicating if split() was called.
 
@@ -260,8 +255,8 @@ class DatasetAutoFolds(Dataset):
         elif df is not None:
             self.df = df
             self.raw_ratings = [
-                (uid, iid, float(r), None)
-                for (uid, iid, r) in self.df.itertuples(index=False)
+                (uid, iid, float(r), timestamp)
+                for (uid, iid, r, timestamp) in self.df.itertuples(index=False)
             ]
         else:
             raise ValueError("Must specify ratings file or dataframe.")

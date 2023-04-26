@@ -48,7 +48,6 @@ class Trainset:
         raw2inner_id_users,
         raw2inner_id_items,
     ):
-
         self.ur = ur
         self.ir = ir
         self.n_users = n_users
@@ -190,8 +189,8 @@ class Trainset:
         """
 
         for u, u_ratings in self.ur.items():
-            for i, r in u_ratings:
-                yield u, i, r
+            for i, r, timestamp in u_ratings:
+                yield u, i, r, timestamp
 
     def build_testset(self):
         """Return a list of ratings that can be used as a testset in the
