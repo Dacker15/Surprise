@@ -204,8 +204,8 @@ class Trainset:
         """
 
         return [
-            (self.to_raw_uid(u), self.to_raw_iid(i), r)
-            for (u, i, r) in self.all_ratings()
+            (self.to_raw_uid(u), self.to_raw_iid(i), r, timestamp)
+            for (u, i, r, timestamp) in self.all_ratings()
         ]
 
     def build_anti_testset(self, fill=None):
@@ -259,6 +259,6 @@ class Trainset:
     @property
     def global_mean(self):
         if self._global_mean is None:
-            self._global_mean = np.mean([r for (_, _, r) in self.all_ratings()])
+            self._global_mean = np.mean([r for (_, _, r, _) in self.all_ratings()])
 
         return self._global_mean
