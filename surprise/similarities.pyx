@@ -66,7 +66,7 @@ def cosine(int n_x, yr, int min_support):
     cdef int min_sprt = min_support
 
     for y, y_ratings in yr.items():
-        for xi, ri in y_ratings:
+        for xi, ri, timestamp in y_ratings:
             for xj, rj in y_ratings:
                 freq[xi, xj] += 1
                 prods[xi, xj] += ri * rj
@@ -133,7 +133,7 @@ def msd(int n_x, yr, int min_support):
     cdef int min_sprt = min_support
 
     for y, y_ratings in yr.items():
-        for xi, ri in y_ratings:
+        for xi, ri, timestamp in y_ratings:
             for xj, rj in y_ratings:
                 sq_diff[xi, xj] += (ri - rj)**2
                 freq[xi, xj] += 1
@@ -205,7 +205,7 @@ def pearson(int n_x, yr, int min_support):
     cdef int min_sprt = min_support
 
     for y, y_ratings in yr.items():
-        for xi, ri in y_ratings:
+        for xi, ri, timestamp in y_ratings:
             for xj, rj in y_ratings:
                 prods[xi, xj] += ri * rj
                 freq[xi, xj] += 1
@@ -308,7 +308,7 @@ def pearson_baseline(
     for y, y_ratings in yr.items():
         partial_bias = global_mean_ + y_biases[y]
         for xi, ri in y_ratings:
-            for xj, rj in y_ratings:
+            for xj, rj, timestamp in y_ratings:
                 freq[xi, xj] += 1
                 diff_i = (ri - (partial_bias + x_biases[xi]))
                 diff_j = (rj - (partial_bias + x_biases[xj]))

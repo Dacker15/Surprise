@@ -53,7 +53,7 @@ class SlopeOne(AlgoBase):
 
         # Computation of freq and dev arrays.
         for u, u_ratings in trainset.ur.items():
-            for i, r_ui in u_ratings:
+            for i, r_ui, _ in u_ratings:
                 for j, r_uj in u_ratings:
                     freq[i, j] += 1
                     dev[i, j] += r_ui - r_uj

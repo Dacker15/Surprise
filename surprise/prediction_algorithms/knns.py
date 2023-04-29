@@ -170,7 +170,7 @@ class KNNWithMeans(SymmetricAlgo):
 
         self.means = np.zeros(self.n_x)
         for x, ratings in self.xr.items():
-            self.means[x] = np.mean([r for (_, r) in ratings])
+            self.means[x] = np.mean([r for (_, r, _) in ratings])
 
         return self
 
@@ -364,7 +364,7 @@ class KNNWithZScore(SymmetricAlgo):
         self.overall_sigma = np.std([r for (_, _, r, _) in self.trainset.all_ratings()])
 
         for x, ratings in self.xr.items():
-            self.means[x] = np.mean([r for (_, r) in ratings])
+            self.means[x] = np.mean([r for (_, r, _) in ratings])
             sigma = np.std([r for (_, r) in ratings])
             self.sigmas[x] = self.overall_sigma if sigma == 0.0 else sigma
 
