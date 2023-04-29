@@ -22,7 +22,6 @@ class AlgoBase:
     """
 
     def __init__(self, **kwargs):
-
         self.bsl_options = kwargs.get("bsl_options", {})
         self.sim_options = kwargs.get("sim_options", {})
         if "user_based" not in self.sim_options:
@@ -159,7 +158,7 @@ class AlgoBase:
         # The ratings are translated back to their original scale.
         predictions = [
             self.predict(uid, iid, r_ui_trans, verbose=verbose)
-            for (uid, iid, r_ui_trans) in testset
+            for (uid, iid, r_ui_trans, _) in testset
         ]
         return predictions
 
