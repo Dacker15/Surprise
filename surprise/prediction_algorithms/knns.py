@@ -28,12 +28,10 @@ class SymmetricAlgo(AlgoBase):
     """
 
     def __init__(self, sim_options={}, verbose=True, **kwargs):
-
         AlgoBase.__init__(self, sim_options=sim_options, **kwargs)
         self.verbose = verbose
 
     def fit(self, trainset):
-
         AlgoBase.fit(self, trainset)
 
         ub = self.sim_options["user_based"]
@@ -87,20 +85,17 @@ class KNNBasic(SymmetricAlgo):
     """
 
     def __init__(self, k=40, min_k=1, sim_options={}, verbose=True, **kwargs):
-
         SymmetricAlgo.__init__(self, sim_options=sim_options, verbose=verbose, **kwargs)
         self.k = k
         self.min_k = min_k
 
     def fit(self, trainset):
-
         SymmetricAlgo.fit(self, trainset)
         self.sim = self.compute_similarities()
 
         return self
 
     def estimate(self, u, i):
-
         if not (self.trainset.knows_user(u) and self.trainset.knows_item(i)):
             raise PredictionImpossible("User and/or item is unknown.")
 
@@ -111,7 +106,7 @@ class KNNBasic(SymmetricAlgo):
 
         # compute weighted average
         sum_sim = sum_ratings = actual_k = 0
-        for (sim, r) in k_neighbors:
+        for sim, r in k_neighbors:
             if sim > 0:
                 sum_sim += sim
                 sum_ratings += sim * r
@@ -164,14 +159,12 @@ class KNNWithMeans(SymmetricAlgo):
     """
 
     def __init__(self, k=40, min_k=1, sim_options={}, verbose=True, **kwargs):
-
         SymmetricAlgo.__init__(self, sim_options=sim_options, verbose=verbose, **kwargs)
 
         self.k = k
         self.min_k = min_k
 
     def fit(self, trainset):
-
         SymmetricAlgo.fit(self, trainset)
         self.sim = self.compute_similarities()
 
@@ -182,7 +175,6 @@ class KNNWithMeans(SymmetricAlgo):
         return self
 
     def estimate(self, u, i):
-
         if not (self.trainset.knows_user(u) and self.trainset.knows_item(i)):
             raise PredictionImpossible("User and/or item is unknown.")
 
@@ -195,7 +187,7 @@ class KNNWithMeans(SymmetricAlgo):
 
         # compute weighted average
         sum_sim = sum_ratings = actual_k = 0
-        for (nb, sim, r) in k_neighbors:
+        for nb, sim, r in k_neighbors:
             if sim > 0:
                 sum_sim += sim
                 sum_ratings += sim * (r - self.means[nb])
@@ -264,7 +256,6 @@ class KNNBaseline(SymmetricAlgo):
     def __init__(
         self, k=40, min_k=1, sim_options={}, bsl_options={}, verbose=True, **kwargs
     ):
-
         SymmetricAlgo.__init__(
             self,
             sim_options=sim_options,
@@ -277,7 +268,6 @@ class KNNBaseline(SymmetricAlgo):
         self.min_k = min_k
 
     def fit(self, trainset):
-
         SymmetricAlgo.fit(self, trainset)
         self.bu, self.bi = self.compute_baselines()
         self.bx, self.by = self.switch(self.bu, self.bi)
@@ -286,7 +276,6 @@ class KNNBaseline(SymmetricAlgo):
         return self
 
     def estimate(self, u, i):
-
         est = self.trainset.global_mean
         if self.trainset.knows_user(u):
             est += self.bu[u]
@@ -303,7 +292,7 @@ class KNNBaseline(SymmetricAlgo):
 
         # compute weighted average
         sum_sim = sum_ratings = actual_k = 0
-        for (nb, sim, r) in k_neighbors:
+        for nb, sim, r in k_neighbors:
             if sim > 0:
                 sum_sim += sim
                 nb_bsl = self.trainset.global_mean + self.bx[nb] + self.by[y]
@@ -361,20 +350,18 @@ class KNNWithZScore(SymmetricAlgo):
     """
 
     def __init__(self, k=40, min_k=1, sim_options={}, verbose=True, **kwargs):
-
         SymmetricAlgo.__init__(self, sim_options=sim_options, verbose=verbose, **kwargs)
 
         self.k = k
         self.min_k = min_k
 
     def fit(self, trainset):
-
         SymmetricAlgo.fit(self, trainset)
 
         self.means = np.zeros(self.n_x)
         self.sigmas = np.zeros(self.n_x)
         # when certain sigma is 0, use overall sigma
-        self.overall_sigma = np.std([r for (_, _, r) in self.trainset.all_ratings()])
+        self.overall_sigma = np.std([r for (_, _, r, _) in self.trainset.all_ratings()])
 
         for x, ratings in self.xr.items():
             self.means[x] = np.mean([r for (_, r) in ratings])
@@ -386,7 +373,6 @@ class KNNWithZScore(SymmetricAlgo):
         return self
 
     def estimate(self, u, i):
-
         if not (self.trainset.knows_user(u) and self.trainset.knows_item(i)):
             raise PredictionImpossible("User and/or item is unknown.")
 
@@ -399,7 +385,7 @@ class KNNWithZScore(SymmetricAlgo):
 
         # compute weighted average
         sum_sim = sum_ratings = actual_k = 0
-        for (nb, sim, r) in k_neighbors:
+        for nb, sim, r in k_neighbors:
             if sim > 0:
                 sum_sim += sim
                 sum_ratings += sim * (r - self.means[nb]) / self.sigmas[nb]

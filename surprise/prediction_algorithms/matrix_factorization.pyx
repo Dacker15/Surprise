@@ -225,7 +225,7 @@ class SVD(AlgoBase):
             if self.verbose:
                 print("Processing epoch {}".format(current_epoch))
 
-            for u, i, r in trainset.all_ratings():
+            for u, i, r, timestamp in trainset.all_ratings():
                 # compute current error
                 dot = 0  # <q_i, p_u>
                 for f in range(n_factors):
@@ -461,7 +461,7 @@ class SVDpp(AlgoBase):
             if self.verbose:
                 print(" processing epoch {}".format(current_epoch))
 
-            for u, i, r in trainset.all_ratings():
+            for u, i, r, timestamp in trainset.all_ratings():
 
                 # items rated by u.
                 if cache_ratings:
@@ -705,7 +705,7 @@ class NMF(AlgoBase):
             item_denom[:, :] = 0
 
             # Compute numerators and denominators for users and items factors
-            for u, i, r in trainset.all_ratings():
+            for u, i, r, timestamp in trainset.all_ratings():
 
                 # compute current estimation and error
                 dot = 0  # <q_i, p_u>

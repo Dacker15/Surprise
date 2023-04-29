@@ -199,7 +199,7 @@ class CoClustering(AlgoBase):
         avg_cocltr = np.zeros((self.n_cltr_u, self.n_cltr_i), np.double)
 
         # Compute counts and sums for every cluster.
-        for u, i, r in self.trainset.all_ratings():
+        for u, i, r, timestamp in self.trainset.all_ratings():
             uc = cltr_u[u]
             ic = cltr_i[i]
 
