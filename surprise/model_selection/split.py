@@ -73,7 +73,6 @@ class KFold:
     """
 
     def __init__(self, n_splits=5, random_state=None, shuffle=True):
-
         self.n_splits = n_splits
         self.shuffle = shuffle
         self.random_state = random_state
@@ -120,7 +119,6 @@ class KFold:
             yield trainset, testset
 
     def get_n_folds(self):
-
         return self.n_splits
 
 
@@ -149,7 +147,6 @@ class RepeatedKFold:
     """
 
     def __init__(self, n_splits=5, n_repeats=10, random_state=None):
-
         self.n_repeats = n_repeats
         self.random_state = random_state
         self.n_splits = n_splits
@@ -172,7 +169,6 @@ class RepeatedKFold:
             yield from cv.split(data)
 
     def get_n_folds(self):
-
         return self.n_repeats * self.n_splits
 
 
@@ -219,7 +215,6 @@ class ShuffleSplit:
         random_state=None,
         shuffle=True,
     ):
-
         if n_splits <= 0:
             raise ValueError(
                 "n_splits = {} should be strictly greater than " "0.".format(n_splits)
@@ -241,7 +236,6 @@ class ShuffleSplit:
         self.shuffle = shuffle
 
     def validate_train_test_sizes(self, test_size, train_size, n_ratings):
-
         if test_size is not None and test_size >= n_ratings:
             raise ValueError(
                 "test_size={} should be less than the number of "
@@ -291,7 +285,6 @@ class ShuffleSplit:
         rng = get_rng(self.random_state)
 
         for _ in range(self.n_splits):
-
             if self.shuffle:
                 permutation = rng.permutation(len(data.raw_ratings))
             else:
@@ -309,7 +302,6 @@ class ShuffleSplit:
             yield trainset, testset
 
     def get_n_folds(self):
-
         return self.n_splits
 
 
@@ -383,7 +375,6 @@ class LeaveOneOut:
     """
 
     def __init__(self, n_splits=5, random_state=None, min_n_ratings=0):
-
         self.n_splits = n_splits
         self.random_state = random_state
         self.min_n_ratings = min_n_ratings
@@ -401,8 +392,8 @@ class LeaveOneOut:
 
         # map ratings to the users ids
         user_ratings = defaultdict(list)
-        for uid, iid, r_ui, _ in data.raw_ratings:
-            user_ratings[uid].append((uid, iid, r_ui, None))
+        for uid, iid, r_ui, timestamp in data.raw_ratings:
+            user_ratings[uid].append((uid, iid, r_ui, timestamp or None))
 
         rng = get_rng(self.random_state)
 
@@ -428,7 +419,6 @@ class LeaveOneOut:
             yield trainset, testset
 
     def get_n_folds(self):
-
         return self.n_splits
 
 
@@ -453,7 +443,6 @@ class PredefinedKFold:
 
         self.n_splits = len(data.folds_files)
         for train_file, test_file in data.folds_files:
-
             raw_trainset = data.read_ratings(train_file)
             raw_testset = data.read_ratings(test_file)
             trainset = data.construct_trainset(raw_trainset)
@@ -462,5 +451,4 @@ class PredefinedKFold:
             yield trainset, testset
 
     def get_n_folds(self):
-
         return self.n_splits
