@@ -101,7 +101,7 @@ class KNNBasic(SymmetricAlgo):
 
         x, y = self.switch(u, i)
 
-        neighbors = [(self.sim[x, x2], r) for (x2, r) in self.yr[y]]
+        neighbors = [(self.sim[x, x2], r) for (x2, r, _) in self.yr[y]]
         k_neighbors = heapq.nlargest(self.k, neighbors, key=lambda t: t[0])
 
         # compute weighted average
@@ -180,7 +180,7 @@ class KNNWithMeans(SymmetricAlgo):
 
         x, y = self.switch(u, i)
 
-        neighbors = [(x2, self.sim[x, x2], r) for (x2, r) in self.yr[y]]
+        neighbors = [(x2, self.sim[x, x2], r) for (x2, r, _) in self.yr[y]]
         k_neighbors = heapq.nlargest(self.k, neighbors, key=lambda t: t[1])
 
         est = self.means[x]
@@ -287,7 +287,7 @@ class KNNBaseline(SymmetricAlgo):
         if not (self.trainset.knows_user(u) and self.trainset.knows_item(i)):
             return est
 
-        neighbors = [(x2, self.sim[x, x2], r) for (x2, r) in self.yr[y]]
+        neighbors = [(x2, self.sim[x, x2], r) for (x2, r, _) in self.yr[y]]
         k_neighbors = heapq.nlargest(self.k, neighbors, key=lambda t: t[1])
 
         # compute weighted average
@@ -378,7 +378,7 @@ class KNNWithZScore(SymmetricAlgo):
 
         x, y = self.switch(u, i)
 
-        neighbors = [(x2, self.sim[x, x2], r) for (x2, r) in self.yr[y]]
+        neighbors = [(x2, self.sim[x, x2], r) for (x2, r, _) in self.yr[y]]
         k_neighbors = heapq.nlargest(self.k, neighbors, key=lambda t: t[1])
 
         est = self.means[x]
