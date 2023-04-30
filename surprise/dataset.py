@@ -222,7 +222,10 @@ class Dataset:
         return trainset
 
     def construct_testset(self, raw_testset):
-        return [(ruid, riid, r_ui_trans) for (ruid, riid, r_ui_trans, _) in raw_testset]
+        return [
+            (ruid, riid, r_ui_trans, timestamp)
+            for (ruid, riid, r_ui_trans, timestamp) in raw_testset
+        ]
 
 
 class DatasetUserFolds(Dataset):
